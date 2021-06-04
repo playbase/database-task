@@ -1,15 +1,15 @@
 from flask import Flask, render_template, request, jsonify,Blueprint
-from cassendra_db import CassendraUtil
+from mysqldb.mysql_db import MySQLUtil
 import logging as log
 import csv
 
 log.basicConfig(level=log.INFO)
-cassendra_api = Blueprint('cassendra_api', __name__)
+mysql_api = Blueprint('mysql_api', __name__)
 
-cassendra_util = CassendraUtil()
+mysql_util = MySQLUtil()
 
-@cassendra_api.route('/cassendra/create_table',methods=['POST'])
-def cassendra_create_table():
+@mysql_api.route('/mysqldb/create_table',methods=['POST'])
+def mysql_create_table():
      try:
          table_name = request.json['table_name']
          columns = request.json['columns']
@@ -25,14 +25,14 @@ def cassendra_create_table():
                  insert_query += ")"
 
          log.info("Insert Query:- " + insert_query)
-         cassendra_util.execute_table_data(insert_query)
+         mysql_util.create_table(insert_query)
          return "Table Created Successfully"
      except Exception as e:
        log.error(str(e))
        return "Error Creating Table"
 
-@cassendra_api.route('/cassendra/insert_table_data', methods=['POST'])
-def cassendra_insert_table_data():
+@mysql_api.route('/mysqldb/insert_table_data', methods=['POST'])
+def mysql_insert_table_data():
     try:
      table_name = request.json['table_name']
      columns = request.json['columns']
@@ -53,14 +53,14 @@ def cassendra_insert_table_data():
              insert_query += ")"
 
      log.info("Insert Query:- " + insert_query)
-     cassendra_util.execute_table_data(insert_query)
+     mysql_util.execute_table_data(insert_query)
      return "Record inserted Successfully"
     except Exception as e:
         log.error(str(e))
         return "Error Inserting  Record"
 
-@cassendra_api.route('/cassendra/update_table_data', methods=['POST','PUT'])
-def cassendra_update_table_data():
+@mysql_api.route('/mysqldb/update_table_data', methods=['POST','PUT'])
+def mysql_update_table_data():
     try:
         table_name = request.json['table_name']
         columns = request.json['columns']
@@ -76,15 +76,15 @@ def cassendra_update_table_data():
         update_query += " " + condition
         log.info("Update Query :- " + update_query)
 
-        cassendra_util.execute_table_data(update_query)
+        mysql_util.execute_table_data(update_query)
         return "Records Updated Successfully"
 
     except Exception as e:
         log.error(str(e))
         return "Error Updating  Record"
 
-@cassendra_api.route('/cassendra/delete_table_data', methods=['POST','DELETE'])
-def cassendra_delete_table_data():
+@mysql_api.route('/mysqldb/delete_table_data', methods=['POST','DELETE'])
+def mysql_delete_table_data():
     try:
         table_name = request.json['table_name']
         condition = request.json['condition']
@@ -92,15 +92,15 @@ def cassendra_delete_table_data():
         delete_query = "DELETE FROM {} {} ".format(table_name,condition)
         log.info("Update Query :- " + delete_query)
 
-        cassendra_util.execute_table_data(delete_query)
+        mysql_util.execute_table_data(delete_query)
         return "Records Deleted Successfully"
 
     except Exception as e:
         log.error(str(e))
         return "Error Deleting Record"
 
-@cassendra_api.route('/cassendra/bulk_insert_data', methods=['POST'])
-def cassendra_bulk_insert_table_data():
+@mysql_api.route('/mysqldb/bulk_insert_data', methods=['POST'])
+def mysql_bulk_insert_table_data():
     try:
         table_name = request.json['table_name']
         file_name = request.json['file_name']
@@ -115,21 +115,21 @@ def cassendra_bulk_insert_table_data():
                 else:
                     for list_ in (line[1]):
                         log.info("Bulk Insert Query: " + bulk_insert_query + "({})".format(list_))
-                        cassendra_util.execute_table_data(bulk_insert_query + "({})".format(list_))
+                        mysql_util.execute_table_data(bulk_insert_query + "({})".format(list_))
                         line_count += 1
         return "Records Inserted Successfully"
     except Exception as e:
         log.error(str(e))
         return "Error Bulk Insertion of  Record"
 
-@cassendra_api.route('/cassendra/view_table_data', methods=['POST'])
-def cassendra_view_table_data():
+@mysql_api.route('/mysqldb/view_table_data', methods=['POST'])
+def mysql_view_table_data():
     try:
         table_name = request.json['table_name']
         select_query = "select * from {}".format(table_name)
-        results = cassendra_util.select_table_data(select_query)
+        results = mysql_util.select_table_data(select_query)
 
-        filename = "cassendra_download_records.csv"
+        filename = "mysqldb/mysql_download_records.csv"
         with open(filename, 'w') as f:
             # creating a csv writer object
             csvwriter = csv.writer(f)

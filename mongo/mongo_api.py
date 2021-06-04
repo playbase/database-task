@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify,Blueprint
-from mongo_db import MongoUtil
+from mongo.mongo_db import MongoUtil
 import logging as log
 import csv
 

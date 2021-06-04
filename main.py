@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify,Blueprint
-from mysql_api import mysql_api
-from mongo_api import mongo_api
-from cassendra_api import cassendra_api
+from mysqldb.mysql_api import mysql_api
+from mongo.mongo_api import mongo_api
+from cassendra.cassendra_api import cassendra_api
 
 app = Flask(__name__)
 app.register_blueprint(mysql_api)

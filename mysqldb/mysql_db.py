@@ -9,7 +9,7 @@ class MySQLUtil:
 
     def get_connection(self):
         try:
-            db_conn = connection.connect(host="localhost",  database='Student', user="root", passwd="Tango123", use_pure=True,autocommit=True)
+            db_conn = connection.connect(host="localhost",  database='Student', user="root", passwd="*****", use_pure=True,autocommit=True)
             # check if the connection is established
             return db_conn
         except Exception as e:

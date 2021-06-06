@@ -4,7 +4,7 @@ import logging as log
 class CassendraUtil:
     log.basicConfig(level=log.INFO)
 
-    def __init__(self):
+    def __init__(self)
         self.db_conn = self.get_connection()
 
     def get_connection(self):

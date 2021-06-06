@@ -5,7 +5,6 @@ import csv
 
 log.basicConfig(level=log.INFO)
 cassendra_api = Blueprint('cassendra_api', __name__)
-
 cassendra_util = CassendraUtil()
 
 @cassendra_api.route('/cassendra/create_table',methods=['POST'])

@@ -35,3 +35,17 @@ class MongoUtil:
            except Exception as e:
                log.error(str(e))
                raise e
+
+       def insert_bulk_collection_data(self, insert_str):
+           try:
+               self.db_conn.insert_many(insert_str)
+           except Exception as e:
+               log.error(str(e))
+               raise e
+
+       def select_collection_data(self):
+           try:
+               return self.db_conn.find()
+           except Exception as e:
+               log.error(str(e))
+               raise e
